@@ -10,18 +10,20 @@ repositories {
 }
 
 dependencies {
-    //old ones
-    /*
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    */
-
-    // Cucumber dependencies
+    // Cucumber
     testImplementation 'io.cucumber:cucumber-java:7.20.1'
     testImplementation 'io.cucumber:cucumber-junit:7.20.1'
 
-    // JUnit for running the tests
+    // JUnit
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.2'
+
+    // Selenium & WebDriverManager
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.25.0'
+    testImplementation 'io.github.bonigarcia:webdrivermanager:5.9.2'
+
+    // Lombok
+    testCompileOnly 'org.projectlombok:lombok:1.18.34'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
 }
 
 test {
@@ -39,9 +41,9 @@ task cucumber() {
     dependsOn assemble, testClasses
     doLast {
         javaexec {
-            main = "io.cucumber.core.cli.Main"
+            mainClass = "io.cucumber.core.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
-            args = ['--plugin', 'pretty', '--glue', 'io.github.nicopizar00.steps', 'src/test/resources/features']
+            args = ['--plugin', 'pretty', 'html:target/cucumber-report.html', '--glue', 'io.github.nicopizar00.steps', 'src/test/resources/features']
         }
     }
 }
